@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Holi Wishes 🌈</title>
+<title>Holi Special Wish 🌈</title>
 
 <style>
 body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  overflow: hidden;
-  background: linear-gradient(45deg, #ff0066, #ffcc00, #00ccff, #ff0066);
-  background-size: 400% 400%;
-  animation: bg 8s infinite linear;
-  color: white;
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  text-align:center;
+  overflow-x:hidden;
+  background: linear-gradient(-45deg,#ff0080,#ff8c00,#40e0d0,#ff0080);
+  background-size:400% 400%;
+  animation:bg 10s ease infinite;
+  color:white;
 }
 
 @keyframes bg {
@@ -23,56 +23,51 @@ body {
   100%{background-position:0% 50%;}
 }
 
-.container {
-  margin-top: 80px;
-  padding: 20px;
-  position: relative;
-  z-index: 2;
+.card {
+  margin:60px auto;
+  padding:30px;
+  width:90%;
+  max-width:400px;
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.15);
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
 }
 
 h1 {
-  font-size: 38px;
+  font-size:28px;
 }
 
 input {
-  padding: 12px;
-  width: 250px;
-  border-radius: 25px;
-  border: none;
-  outline: none;
-  font-size: 16px;
+  width:90%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:25px;
+  outline:none;
 }
 
 button {
-  padding: 12px 25px;
-  margin: 10px;
-  border-radius: 25px;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+  padding:12px 20px;
+  margin:6px;
+  border:none;
+  border-radius:25px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
 }
 
-.generate {
-  background: white;
-  color: #ff0066;
-}
+.generate { background:white; color:#ff0080; }
+.share { background:#25D366; color:white; }
+.music { background:black; color:white; }
 
-.share {
-  background: #25D366;
-  color: white;
-}
-
-button:hover {
-  transform: scale(1.1);
-}
+button:hover { transform:scale(1.1); }
 
 .wish {
-  margin-top: 30px;
-  font-size: 24px;
-  display: none;
-  animation: pop 0.8s ease;
+  margin-top:20px;
+  font-size:20px;
+  display:none;
+  animation:pop 0.8s ease;
 }
 
 @keyframes pop {
@@ -80,97 +75,127 @@ button:hover {
   to{transform:scale(1);}
 }
 
-/* Color splash circles */
-.splash {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.6;
-  animation: splash 2s linear forwards;
-}
-
-@keyframes splash {
-  from {transform: scale(0); opacity: 1;}
-  to {transform: scale(5); opacity: 0;}
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
   <h1>🌈 Happy Holi 2026 🫟</h1>
 
-  <input type="text" id="nameInput" placeholder="Enter Your Name">
-  <br>
+  <input type="text" id="toName" placeholder="Enter Name">
+  <input type="text" id="fromName" placeholder="From (Your Name)">
+  
   <button class="generate" onclick="generateWish()">Generate Wish 🎉</button>
-  <button class="share" onclick="shareWhatsApp()">Share on WhatsApp 📲</button>
+  <button class="share" onclick="shareLink()">Share 📲</button>
+  <button class="music" onclick="toggleMusic()">🎵 Music</button>
 
-  <div class="wish" id="wishMessage"></div>
+  <div class="wish" id="wishBox"></div>
 </div>
 
-<!-- Background Music -->
-<audio id="holiMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<canvas id="confetti"></canvas>
+
+<audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
 <script>
+// Auto detect URL params
+window.onload = function() {
+  const params = new URLSearchParams(window.location.search);
+  const to = params.get("to");
+  const from = params.get("from");
 
-function generateWish() {
-  let name = document.getElementById("nameInput").value;
-  let wishBox = document.getElementById("wishMessage");
-  let music = document.getElementById("holiMusic");
+  if(to){
+    document.getElementById("toName").value = to;
+    if(from) document.getElementById("fromName").value = from;
+    generateWish();
+  }
+};
 
-  if(name.trim() === "") {
-    alert("Please enter your name 😊");
+function generateWish(){
+  let to = document.getElementById("toName").value.trim();
+  let from = document.getElementById("fromName").value.trim();
+  let box = document.getElementById("wishBox");
+
+  if(to===""){
+    alert("Enter a name 😊");
     return;
   }
 
-  let messages = [
-    `🌸 Hey ${name}!\nMay your Holi be filled with vibrant colors,\nendless happiness and sweet memories! 🎨✨`,
+  let message = `
+  🌸 Dear ${to},<br>
+  May your life be filled with vibrant colors, happiness and positivity! 🎨✨<br>
+  Wishing you a joyful and bright Holi!<br><br>
+  💌 From: ${from || "Someone Special"}
+  `;
 
-    `🌈 ${name}, splash into the festival of colors!\nMay joy, love and laughter surround you\nthis beautiful Holi and always! 💖🎉`,
+  box.style.display="block";
+  box.innerHTML=message;
 
-    `🎨 Dear ${name},\nLet’s paint life with positivity and smiles!\nWishing you a bright and cheerful Holi! 🌟`
-  ];
-
-  let randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-  wishBox.style.display = "block";
-  wishBox.innerHTML = randomMessage.replace(/\n/g, "<br>");
-
-  music.play();
-
-  createSplash();
+  launchConfetti();
 }
 
-function createSplash() {
-  let splash = document.createElement("div");
-  splash.classList.add("splash");
-  splash.style.width = "100px";
-  splash.style.height = "100px";
-  splash.style.background = randomColor();
-  splash.style.top = Math.random() * window.innerHeight + "px";
-  splash.style.left = Math.random() * window.innerWidth + "px";
-  document.body.appendChild(splash);
+function shareLink(){
+  let to = document.getElementById("toName").value.trim();
+  let from = document.getElementById("fromName").value.trim();
 
-  setTimeout(() => splash.remove(), 2000);
-}
-
-function randomColor() {
-  let colors = ["#ff0066", "#ffcc00", "#00ccff", "#00ff99", "#ff6600"];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function shareWhatsApp() {
-  let name = document.getElementById("nameInput").value;
-  if(name.trim() === "") {
-    alert("Enter your name first 😊");
+  if(to===""){
+    alert("Enter name first 😊");
     return;
   }
 
-  let text = `🌈 Happy Holi from ${name}! 🎨✨ Wishing you lots of colors, joy and happiness!`;
-  let url = "https://wa.me/?text=" + encodeURIComponent(text);
-  window.open(url, "_blank");
+  let link = window.location.origin + window.location.pathname + 
+             "?to=" + encodeURIComponent(to) + 
+             "&from=" + encodeURIComponent(from);
+
+  let text = `🌈 Special Holi Wish for ${to}! 🎉\nClick here 👉 ${link}`;
+  window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
 }
 
+function toggleMusic(){
+  let music=document.getElementById("bgMusic");
+  music.paused?music.play():music.pause();
+}
+
+// Simple Confetti
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+
+function launchConfetti(){
+  pieces = [];
+  for(let i=0;i<150;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*6+4,
+      d:Math.random()*canvas.height,
+      color:["#ff0080","#ffcc00","#00ffcc","#ff6600"][Math.floor(Math.random()*4)]
+    });
+  }
+  draw();
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pieces.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,false);
+    ctx.fillStyle=p.color;
+    ctx.fill();
+    p.y+=2;
+    if(p.y>canvas.height) p.y=0;
+  });
+  requestAnimationFrame(draw);
+}
 </script>
 
 </body>
