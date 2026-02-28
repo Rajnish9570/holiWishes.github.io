@@ -1,53 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Holi Special Wish 🌈</title>
+<title>Special Holi Wish 🌈</title>
 
 <style>
-body {
+body{
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family:Segoe UI, sans-serif;
   text-align:center;
-  overflow-x:hidden;
-  background: linear-gradient(-45deg,#ff0080,#ff8c00,#40e0d0,#ff0080);
+  background:linear-gradient(-45deg,#ff0080,#ffcc00,#00ccff,#ff0080);
   background-size:400% 400%;
-  animation:bg 10s ease infinite;
+  animation:bg 8s ease infinite;
   color:white;
 }
 
-@keyframes bg {
+@keyframes bg{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
 
-.card {
-  margin:60px auto;
+.card{
+  margin:70px auto;
   padding:30px;
   width:90%;
   max-width:400px;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
   border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+  box-shadow:0 8px 20px rgba(0,0,0,0.3);
 }
 
-h1 {
-  font-size:28px;
-}
-
-input {
+input{
   width:90%;
   padding:12px;
-  margin:8px 0;
   border:none;
   border-radius:25px;
   outline:none;
+  margin:10px 0;
 }
 
-button {
+button{
   padding:12px 20px;
   margin:6px;
   border:none;
@@ -57,25 +52,25 @@ button {
   transition:0.3s;
 }
 
-.generate { background:white; color:#ff0080; }
-.share { background:#25D366; color:white; }
-.music { background:black; color:white; }
+.generate{background:white;color:#ff0080;}
+.share{background:#25D366;color:white;}
+.music{background:black;color:white;}
 
-button:hover { transform:scale(1.1); }
+button:hover{transform:scale(1.1);}
 
-.wish {
+.wish{
   margin-top:20px;
   font-size:20px;
   display:none;
   animation:pop 0.8s ease;
 }
 
-@keyframes pop {
+@keyframes pop{
   from{transform:scale(0);}
   to{transform:scale(1);}
 }
 
-canvas {
+canvas{
   position:fixed;
   top:0;
   left:0;
@@ -87,74 +82,63 @@ canvas {
 <body>
 
 <div class="card">
-  <h1>🌈 Happy Holi 2026 🫟</h1>
+  <h2>🌈 Happy Holi 2026 🫟</h2>
 
-  <input type="text" id="toName" placeholder="Enter Name">
-  <input type="text" id="fromName" placeholder="From (Your Name)">
+  <input type="text" id="nameBox" placeholder="Enter Your Name">
   
   <button class="generate" onclick="generateWish()">Generate Wish 🎉</button>
-  <button class="share" onclick="shareLink()">Share 📲</button>
+  <button class="share" onclick="shareWish()">Share 📲</button>
   <button class="music" onclick="toggleMusic()">🎵 Music</button>
 
-  <div class="wish" id="wishBox"></div>
+  <div class="wish" id="wishArea"></div>
 </div>
 
 <canvas id="confetti"></canvas>
-
 <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
 <script>
-// Auto detect URL params
-window.onload = function() {
-  const params = new URLSearchParams(window.location.search);
-  const to = params.get("to");
-  const from = params.get("from");
 
-  if(to){
-    document.getElementById("toName").value = to;
-    if(from) document.getElementById("fromName").value = from;
+// Auto load from link
+window.onload=function(){
+  const params=new URLSearchParams(window.location.search);
+  const name=params.get("name");
+  if(name){
+    document.getElementById("nameBox").value=name;
     generateWish();
   }
 };
 
 function generateWish(){
-  let to = document.getElementById("toName").value.trim();
-  let from = document.getElementById("fromName").value.trim();
-  let box = document.getElementById("wishBox");
+  let name=document.getElementById("nameBox").value.trim();
+  let wish=document.getElementById("wishArea");
 
-  if(to===""){
-    alert("Enter a name 😊");
+  if(name===""){
+    alert("Please enter your name 😊");
     return;
   }
 
-  let message = `
-  🌸 Dear ${to},<br>
-  May your life be filled with vibrant colors, happiness and positivity! 🎨✨<br>
-  Wishing you a joyful and bright Holi!<br><br>
-  💌 From: ${from || "Someone Special"}
+  let message=`
+  🎨 Hey ${name}!<br>
+  May your Holi be filled with vibrant colors, sweet moments & endless joy! 🌈✨<br>
+  Keep shining and spreading happiness everywhere! 💖
   `;
 
-  box.style.display="block";
-  box.innerHTML=message;
+  wish.style.display="block";
+  wish.innerHTML=message;
 
   launchConfetti();
 }
 
-function shareLink(){
-  let to = document.getElementById("toName").value.trim();
-  let from = document.getElementById("fromName").value.trim();
-
-  if(to===""){
-    alert("Enter name first 😊");
+function shareWish(){
+  let name=document.getElementById("nameBox").value.trim();
+  if(name===""){
+    alert("Enter your name first 😊");
     return;
   }
 
-  let link = window.location.origin + window.location.pathname + 
-             "?to=" + encodeURIComponent(to) + 
-             "&from=" + encodeURIComponent(from);
-
-  let text = `🌈 Special Holi Wish for ${to}! 🎉\nClick here 👉 ${link}`;
-  window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
+  let link=window.location.origin+window.location.pathname+"?name="+encodeURIComponent(name);
+  let text=`🌈 Special Holi Wish from ${name}! 🎉\nClick here 👉 ${link}`;
+  window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
 }
 
 function toggleMusic(){
@@ -162,22 +146,21 @@ function toggleMusic(){
   music.paused?music.play():music.pause();
 }
 
-// Simple Confetti
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+/* Confetti */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-let pieces = [];
+let pieces=[];
 
 function launchConfetti(){
-  pieces = [];
-  for(let i=0;i<150;i++){
+  pieces=[];
+  for(let i=0;i<120;i++){
     pieces.push({
       x:Math.random()*canvas.width,
       y:Math.random()*canvas.height,
-      r:Math.random()*6+4,
-      d:Math.random()*canvas.height,
+      r:Math.random()*6+3,
       color:["#ff0080","#ffcc00","#00ffcc","#ff6600"][Math.floor(Math.random()*4)]
     });
   }
@@ -188,14 +171,15 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   pieces.forEach(p=>{
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,false);
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle=p.color;
     ctx.fill();
     p.y+=2;
-    if(p.y>canvas.height) p.y=0;
+    if(p.y>canvas.height)p.y=0;
   });
   requestAnimationFrame(draw);
 }
+
 </script>
 
 </body>
